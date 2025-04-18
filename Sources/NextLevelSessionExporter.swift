@@ -478,12 +478,10 @@ extension NextLevelSessionExporter {
             // determine the framerate
             
             var frameRate: Float = 0
-            if let videoConfiguration = self.videoOutputConfiguration {
-                if let videoCompressionConfiguration = videoConfiguration[AVVideoCompressionPropertiesKey] as? [String: Any] {
-                    if let trackFrameRate = videoCompressionConfiguration[AVVideoAverageNonDroppableFrameRateKey] as? NSNumber {
-                        frameRate = trackFrameRate.floatValue
-                    }
-                }
+            if let videoConfiguration = self.videoOutputConfiguration,
+               let compressionConfig = videoConfiguration[AVVideoCompressionPropertiesKey] as? [String: Any],
+               let trackFrameRate = compressionConfig[AVVideoAverageNonDroppableFrameRateKey] as? NSNumber {
+                frameRate = trackFrameRate.floatValue
             } else {
                 frameRate = videoTrack.nominalFrameRate
             }
