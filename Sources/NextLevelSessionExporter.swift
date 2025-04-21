@@ -392,12 +392,14 @@ extension NextLevelSessionExporter {
         }
 
         // Remove APAC/SpatialAudio tracks
+        var audioTracksToUse: [AVAssetTrack] = []
         for audioTrack in audioTracks {
             let mediaSubtypes = audioTrack.formatDescriptions.filter { CMFormatDescriptionGetMediaType($0 as! CMFormatDescription) == kCMMediaType_Audio }.map { CMFormatDescriptionGetMediaSubType($0 as! CMFormatDescription) }
             for mediaSubtype in mediaSubtypes where mediaSubtype != kAudioFormatAPAC {
                 audioTracksToUse.append(audioTrack)
             }
         }
+        
         self._audioOutput = AVAssetReaderAudioMixOutput(audioTracks: audioTracksToUse, audioSettings: nil)
         self._audioOutput?.alwaysCopiesSampleData = false
         self._audioOutput?.audioMix = self.audioMix
